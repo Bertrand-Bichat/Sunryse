@@ -1,0 +1,19 @@
+<div class="bg-gradient">
+
+  <div class="container bg-white">
+    <% if @number > 1 %>
+      <h1 class="text-center pt-5"><%= @number %> profils compatibles ont été trouvés !</h1>
+    <% elsif @number == 1 %>
+      <h1 class="text-center pt-5"><%= @number %> profil compatible a été trouvé !</h1>
+    <% else %>
+      <h1 class="text-center pt-5">Aucun profil n'a été trouvé.
+      <br>
+      <br>
+      Peut-être devriez-vous changer certains de vos critères de recherche ?</h1>
+    <% end %>
+
+    <%= render 'shared/profiles_list', users: @user_matches %>
+
+  </div>
+
+</div>

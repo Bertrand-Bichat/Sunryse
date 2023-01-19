@@ -1,0 +1,53 @@
+i {
+  font-size: 130px;
+}
+
+.fa-trash-alt, .fa-edit, .fa-plus.fa-plus-bis, .fa-exclamation-circle, .fa-check-square, .fa-ban, .fa-spinner, .fa-eye, .fa-eye-slash {
+  font-size: 25px;
+}
+
+.fa-chevron-circle-up, .fa-home, .fa-shopping-basket, .fa-cog, .fa-envelope, .fa-mask, .fa-ban {
+  font-size: 40px;
+}
+
+.fa-search, .fa-chevron-down, .fa-plus, .fa-phone, .fa-microphone-alt, .fa-microphone-alt-slash, .fa-video, .fa-video-slash, .fa-expand, .fa-compress, .fa-chevron-left {
+  font-size: 15px;
+  // color: rgba(0, 0, 0, 0.5);
+  // &:hover {
+  //   opacity: 1;
+  //   color: rgba(0, 0, 0, 0.75);
+  // }
+}
+
+.border-navbar {
+  border: 3px solid;
+}
+
+.icon {
+  font-size: 25px;
+  // font-style: italic;
+  padding: 10px 10px 10px 10px;
+}
+
+.black-hover:hover {
+  color: black;
+  font-weight: bold;
+}
+
+.fa-check-square {
+  color: green;
+}
+
+.counter {
+  border-radius: 50%;
+  height: 40px;
+  padding: 5px 12px;
+  color: $white;
+  background-color: red;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.fa-spinner {
+  color: blue;
+}

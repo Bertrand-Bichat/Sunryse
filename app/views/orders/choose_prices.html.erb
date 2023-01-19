@@ -1,0 +1,56 @@
+<div class="bg-gradient">
+  <div class="container py-5 text-center">
+
+    <!-- title -->
+    <h1>Les tarifs</h1>
+
+    <!-- one-shot payments -->
+    <div class="row w-100 border py-5 bg-white my-5">
+      <h2 class="col-12 mb-5">Tarifs découverte</h2>
+      <br>
+      <div class="col-12 col-md-6">
+        <h3>1 semaine</h3>
+        <h4 class="sunryse-prices"><%= one_week_price %>€</h4>
+        <% if current_user.authorized? %>
+          <%= link_to 'Vous avez déjà accès au site', '', class: "btn btn-primary bg-white disabled" %>
+        <% else %>
+          <%= link_to 'Acheter', current_order_path(duration: one_week, order_type: order_type_one_shot, amount: one_week_price), class: "btn btn-primary" %>
+        <% end %>
+      </div>
+      <div class="col-12 col-md-6">
+        <h3>1 mois</h3>
+        <h4 class="sunryse-prices"><%= one_month_price %>€</h4>
+        <% if current_user.authorized? %>
+          <%= link_to 'Vous avez déjà accès au site', '', class: "btn btn-primary bg-white disabled" %>
+        <% else %>
+          <%= link_to 'Acheter', current_order_path(duration: one_month, order_type: order_type_one_shot, amount: one_month_price), class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- subscription payments -->
+    <div class="row w-100 border py-5 bg-white">
+      <h2 class="col-12 mb-5">Abonnements mensuels</h2>
+      <br>
+      <div class="col-12 col-md-6">
+        <h3>Engagement sur 3 mois minimum</h3>
+        <h4 class="sunryse-prices"><%= three_month_price %>€/mois</h4>
+        <% if current_user.authorized? %>
+          <%= link_to 'Vous avez déjà accès au site', '', class: "btn btn-primary bg-white disabled" %>
+        <% else %>
+          <%= link_to 'Souscrire', current_order_path(duration: three_month, order_type: order_type_subscription, amount: three_month_price), class: "btn btn-primary" %>
+        <% end %>
+      </div>
+      <div class="col-12 col-md-6">
+        <h3>Engagement sur 6 mois minimum</h3>
+        <h4 class="sunryse-prices"><%= six_month_price %>€/mois</h4>
+        <% if current_user.authorized? %>
+          <%= link_to 'Vous avez déjà accès au site', '', class: "btn btn-primary bg-white disabled" %>
+        <% else %>
+          <%= link_to 'Souscrire', current_order_path(duration: six_month, order_type: order_type_subscription, amount: six_month_price), class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</div>

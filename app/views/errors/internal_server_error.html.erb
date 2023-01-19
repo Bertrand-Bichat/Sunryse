@@ -1,0 +1,20 @@
+<% content_for :meta_title, "Nous sommes désolés, mais une erreur s'est produite (erreur 500)"%>
+
+<div class="bg-gradient">
+  <div class="container">
+
+    <!-- logo -->
+    <div class="d-flex justify-content-around py-5">
+      <%= image_tag 'logo_main.png', alt: 'logo SUNRYSE', class: "col-3", loading: 'lazy' %>
+    </div>
+
+    <!-- text & button -->
+    <div class="bg-white py-4">
+      <h1 class="mb-5 text-center">Nous sommes désolés, mais une erreur s'est produite <br> (erreur 500)</h1>
+      <div class="d-flex justify-content-around">
+        <p><%= link_to "Retourner à la page d'accueil", home_path, class: "btn btn-primary error-btn text-white" %></p>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,115 @@
+<div class="bg-gradient">
+  <div class="container bg-white py-5">
+
+    <!-- title -->
+    <h1 class="text-center mb-5">Mes demandes de contact</h1>
+
+    <div class="row text-center">
+
+      <!-- sent -->
+      <div class="col-12 col-md-6 order-1">
+        <h2 class="my-4">Envoyées</h2>
+        <% if @contact_requests_sent.empty? %>
+          <p><em>aucune</em></p>
+        <% else %>
+          <% @contact_requests_sent.each do |contact_request| %>
+
+            <div class="notification" id="cr-<%= contact_request.id %>">
+              <% if contact_request.receiver.avatar.attached? %>
+                <% if contact_request.receiver.avatar.content_type == mp4_content_type %>
+                  <%= cl_video_tag contact_request.receiver.avatar.key, transformation: [ crop: "fill" ], class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+                <% else %>
+                  <%= cl_image_tag contact_request.receiver.avatar.key, crop: :fill, class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+                <% end %>
+              <% else %>
+                <%= image_tag 'avatar-profil.png', class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+              <% end %>
+              <div class="notification-content text-left">
+                <p>
+                  <small class="text-dark"><%= contact_request.created_at.to_date.strftime("%d/%m/%Y") %>, <%= link_to contact_request.receiver.pseudo, profil_path(contact_request.receiver.slug), class: "text-decoration-none font-weight-bold" %></small>
+                </p>
+                <p>
+                  <% if contact_request.accepted? %>
+                    <%= notifications_contact_request_accepted %>
+                  <% elsif contact_request.readed? %>
+                    <%= notifications_contact_request_readed %>
+                  <% else %>
+                    <%= notifications_contact_request_sent %>
+                  <% end %>
+                </p>
+              </div>
+              <div class="notification-actions">
+                <% if contact_request.accepted? %>
+                  <i class="far fa-check-square" title="la demande a été acceptée"></i>
+                <% end %>
+                <% if policy(contact_request).hide_contact_request? %>
+                  <p>
+                    <%= link_to hide_contact_request_path(contact_request.id), remote: true, method: :patch, aria: { label: 'cacher cette demande de contact' } do %>
+                      <i class="fas fa-eye-slash text-orange" title="Cacher cette demande de contact"></i>
+                    <% end %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+
+          <% end %>
+          <%= will_paginate @contact_requests_sent, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+        <% end %>
+      </div>
+
+      <!-- received -->
+      <div class="col-12 col-md-6 order-2 mt-5 mt-md-0">
+        <h2 class="my-4">Reçues <span class="<%= @nbr_new_contact_requests.positive? ? 'counter' : '' %>"><%= @nbr_new_contact_requests.positive? ? @nbr_new_contact_requests : '' %></span></h2>
+        <% if @contact_requests_received.empty? %>
+          <p><em>aucune</em></p>
+        <% else %>
+          <% @contact_requests_received.each do |contact_request| %>
+
+            <div class="notification" id="cr-<%= contact_request.id %>">
+              <% if contact_request.sender.avatar.attached? %>
+                <% if contact_request.sender.avatar.content_type == mp4_content_type %>
+                  <%= cl_video_tag contact_request.sender.avatar.key, transformation: [ crop: "fill" ], class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+                <% else %>
+                  <%= cl_image_tag contact_request.sender.avatar.key, crop: :fill, class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+                <% end %>
+              <% else %>
+                <%= image_tag 'avatar-profil.png', class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+              <% end %>
+              <div class="notification-content text-left">
+                <p>
+                  <small class="text-dark"><%= contact_request.created_at.to_date.strftime("%d/%m/%Y") %>, <%= link_to contact_request.sender.pseudo, profil_path(contact_request.sender.slug), class: "text-decoration-none" %></small>
+                  <i class="fas fa-exclamation-circle ml-3 color-red <%= contact_request.readed ? 'hidden' : '' %>"></i>
+                </p>
+                <p><%= notifications_contact_request %></p>
+              </div>
+              <div class="notification-actions">
+                <% if contact_request.accepted? %>
+                  <i class="far fa-check-square" title="vous avez accepté cette demande"></i>
+                <% end %>
+                <% if policy(contact_request).mark_as_accepted? %>
+                  <p class="btn-accepted">
+                    <%= link_to mark_as_accepted_path(contact_request.id), remote: true, method: :patch, aria: { label: 'accepter cette demande de contact' } do %>
+                      <span class="btn btn-primary" title="accepter cette demande de contact">Accepter</span>
+                    <% end %>
+                  </p>
+                  <i class="far fa-check-square icon-accepted hidden" title="vous avez accepté cette demande"></i>
+                <% end %>
+                <% if policy(contact_request).hide_contact_request? %>
+                  <p>
+                    <%= link_to hide_contact_request_path(contact_request.id), remote: true, method: :patch, aria: { label: 'cacher cette demande de contact' } do %>
+                      <i class="fas fa-eye-slash text-orange" title="Cacher cette demande de contact"></i>
+                    <% end %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+
+          <% end %>
+          <%= will_paginate @contact_requests_received, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+        <% end %>
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="bg-gradient py-5">
+  <div class="container py-3 bg-white">
+
+    <h1 class="text-center">Mes messages</h1>
+
+    <div class="d-flex">
+
+      <div class="list-group w-200px bg-white br-light">
+        <% @chatrooms.each do |chatroom| %>
+          <% (current_user == chatroom.speaker1) ? (other_speaker = chatroom.speaker2) : (other_speaker = chatroom.speaker1) %>
+          <%= link_to chatroom_path(chatroom, anchor: chatroom.posts.empty? ? '' : "post-#{chatroom.posts.last.id}"), class: "list-group-item #{'active' if chatroom == @chatroom} d-flex align-items-center" do %>
+            # <%= other_speaker.pseudo %>
+            <!-- green dot -->
+            <% if other_speaker.online? %>
+              <div class="messages-green-dot ml-2"></div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+    </div>
+
+  </div>
+</div>

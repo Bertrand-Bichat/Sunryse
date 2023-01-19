@@ -1,0 +1,20 @@
+{
+  "name": "Sunryse",
+  "private": true,
+  "dependencies": {
+    "@chrisoakman/chessboardjs": "^1.0.0",
+    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
+    "@rails/webpacker": "5.2.1",
+    "bootstrap": "^4.6.0",
+    "chess.js": "^0.11.0",
+    "jquery": "^3.5.1",
+    "mapbox-gl": "^2.2.0",
+    "places.js": "^1.19.0",
+    "popper.js": "^1.16.1",
+    "tarteaucitronjs": "^1.9.1",
+    "twilio-video": "^2.13.1"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.11.2"
+  }
+}

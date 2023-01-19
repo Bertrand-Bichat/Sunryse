@@ -1,0 +1,46 @@
+<div class="border p-3 my-3 col-12 col-md-4 text-center" id="order-<%= order.id %>">
+  <!-- data -->
+  <p>
+    <% if order.order_type == order_type_subscription %>
+      Abonnement mensuel
+    <% elsif order.order_type == order_type_camera %>
+      <%= order.camera_credits %> crédits d'échange par caméra
+    <% else %>
+      Tarif découverte
+    <% end %>
+  </p>
+  <p>Durée : <%= order.order_type == order_type_camera ? "#{order.camera_credits*30} min" : order.duration %></p>
+  <p>Prix TTC : <%= humanized_money(order.amount) %><%= order.order_type == order_type_subscription ? '€/mois' : '€' %></p>
+
+  <% if order.state == order_state_payed %>
+    <p>Payée <%= order.paid_date.to_date.strftime("le %d/%m/%Y") %></p>
+    <% unless order.order_type == order_type_camera %>
+      <p class="<%= order.active? ? 'text-green' : 'color-red' %> font-weight-bold"><%= order.active? ? 'Actif' : 'Inactif' %></p>
+    <% end %>
+    <% if policy(order).unsubcribed? %>
+      <p>
+        <%= link_to unsubcribed_path(order_id: order.id), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir résilier votre abonnement ?' }, class: "btn btn-primary" do %>
+          Arrêter l'abonnement
+        <% end %>
+      </p>
+    <% elsif (order.order_type == order_type_subscription) && (order.active == false) %>
+      <p>Résilié <%= order.cancel_date.strftime("le %d/%m/%Y") %></p>
+    <% end %>
+  <% end %>
+
+  <!-- buttons -->
+  <% if policy(order).destroy? %>
+    <p>
+      <%= link_to order_path(order.id), remote: true, method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir annuler cette commande ?' }, class: "btn btn-primary" do %>
+        Annuler
+      <% end %>
+    </p>
+  <% end %>
+  <% if policy(order).pay_order? %>
+    <p>
+      <%= link_to pay_order_path(order.id), class: "btn btn-primary" do %>
+        Payer
+      <% end %>
+    </p>
+  <% end %>
+</div>

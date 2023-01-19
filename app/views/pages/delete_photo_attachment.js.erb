@@ -1,0 +1,15 @@
+divPhoto = document.getElementById('photo-<%= @photo.key %>');
+modal = document.getElementById('<%= @photo.key %>');
+// HTML <a> created before divPhoto, don't know why
+a = divPhoto.previousSibling;
+
+// hidden all
+divPhoto.classList.add('hidden');
+
+if (a) {
+  a.classList.add('hidden');
+}
+
+if (modal) {
+  modal.classList.add('hidden');
+}

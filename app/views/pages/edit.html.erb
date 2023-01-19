@@ -1,0 +1,48 @@
+<div class="container my-5">
+
+  <h1 class="text-center">Modifier la page "<%= @page.tag %>"</h1>
+  <div class="mt-5 border p-5">
+
+    <%= simple_form_for(@page) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="">
+        <%= f.input :title,
+                    label: 'Titre',
+                    input_html: { autocomplete: 'title' } %>
+        <%= f.input :content,
+                    label: 'Contenu',
+                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'content' },
+                    as: :ckeditor %>
+        <% if @page.tag == 'accueil' %>
+          <%= f.input :quote,
+                      label: 'Citation',
+                      input_html: { autocomplete: 'quote' } %>
+          <%= f.input :main_logo,
+                      as: :file,
+                      label: "Logo principal (page d'accueil)",
+                      hint: 'Poids de 50 Ko ou moins, largeur de 200 pixels, fond transparent, formats acceptés : JPG, JPEG, PNG' %>
+          <%= f.input :navbar_logo,
+                      as: :file,
+                      label: 'Logo barre de navigation (après connexion)',
+                      hint: 'Poids de 20 Ko ou moins, largeur de 110 pixels, fond transparent, formats acceptés : JPG, JPEG, PNG' %>
+          <%= f.input :background_photo,
+                      as: :file,
+                      label: "Photo en fond d'écran (page d'accueil)",
+                      hint: 'Poids de 1 Mo ou moins, formats acceptés : JPG, JPEG, PNG' %>
+          <%= f.input :favicon,
+                      as: :file,
+                      label: "Favicon (icône apparaissant sur l'onglet du navigateur)",
+                      hint: 'Poids de 10 Ko ou moins, dimension 16x16 pixels, format accepté : ICO' %>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.button :submit, "Valider", class: "btn btn-primary w-100 mt-3" %>
+      </div>
+    <% end %>
+
+  </div>
+
+</div>

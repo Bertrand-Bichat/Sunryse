@@ -1,0 +1,16 @@
+<div class="bg-gradient">
+
+  <div class="container bg-white">
+    <% if @number > 1 %>
+      <h1 class="text-center pt-5">Vous avez <span id="number"><%= @number %></span> profils en favoris</h1>
+    <% elsif @number == 1 %>
+      <h1 class="text-center pt-5">Vous avez <span id="number"><%= @number %></span> profil en favoris</h1>
+    <% else %>
+      <h1 class="text-center pt-5">Vous n'avez aucun profil en favoris.</h1>
+    <% end %>
+
+    <%= render 'shared/profiles_list', users: @profiles_favorites %>
+
+  </div>
+
+</div>

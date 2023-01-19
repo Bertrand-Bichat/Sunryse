@@ -1,0 +1,53 @@
+<div class="bg-gradient d-flex justify-content-around">
+  <div class="publications-width bg-white p-2 p-md-5">
+
+
+    <!-- title -->
+    <h1 class="text-center mb-5">
+      Mes profils bloqués
+    </h1>
+
+    <div class="col-12">
+
+      <!-- user notifications -->
+      <% if @initiator_blockages.empty? %>
+
+        <p class="text-center"><em>aucun</em></p>
+
+      <% else %>
+
+        <% @initiator_blockages.each do |blockage| %>
+          <div class="notification" id="blockage-<%= blockage.id %>">
+            <% if blockage.target.avatar.attached? %>
+              <% if blockage.target.avatar.content_type == mp4_content_type %>
+                <%= cl_video_tag blockage.target.avatar.key, transformation: [ crop: "fill" ], class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+              <% else %>
+                <%= cl_image_tag blockage.target.avatar.key, crop: :fill, class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+              <% end %>
+            <% else %>
+              <%= image_tag 'avatar-profil.png', class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+            <% end %>
+            <div class="notification-content">
+              <p>
+                <p class="text-dark"><%= blockage.created_at.to_date.strftime("%d/%m/%Y") %>, <span class="text-blue font-weight-bold"><%= blockage.target.pseudo %></span></p>
+              </p>
+              <p><%= notifications_blockage %></p>
+            </div>
+            <div class="notification-actions">
+              <% if policy(blockage).destroy? %>
+                <p>
+                  <%= link_to blockage_path(blockage.id), remote: true, method: :delete, data: { confirm: "Êtes-vous sûr de vouloir intéragir de nouveau avec #{blockage.target.pseudo} ?" }, aria: { label: 'annuler ce bloquage' } do %>
+                    <i class="fas fa-trash-alt text-orange" title="Annuler ce bloquage"></i>
+                  <% end %>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+        <%= will_paginate @initiator_blockages, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>

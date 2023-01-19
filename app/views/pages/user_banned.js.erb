@@ -1,0 +1,31 @@
+divBtn = document.getElementById('user-<%= @user.id %>');
+firstBtn = divBtn.querySelector('.btn-first');
+banBtn = divBtn.querySelector('.btn-ban');
+debanBtn = divBtn.querySelector('.btn-deban');
+dot = divBtn.closest('tr').firstElementChild.firstElementChild;
+
+<% if @user.banned? %>
+
+  dot.classList.remove('dot-online');
+  dot.classList.remove('dot-not-online');
+  dot.classList.add('dot-banned');
+  dot.title = 'Banni';
+  firstBtn.classList.add('hidden');
+  banBtn.classList.add('hidden');
+  debanBtn.classList.remove('hidden');
+
+<% else %>
+
+  dot.classList.remove('dot-banned');
+  <% if @user.online? %>
+    dot.classList.add('dot-online');
+    dot.title = 'Oui';
+  <% else %>
+    dot.classList.add('dot-not-online');
+    dot.title = 'Non';
+  <% end %>
+  firstBtn.classList.add('hidden');
+  banBtn.classList.remove('hidden');
+  debanBtn.classList.add('hidden');
+
+<% end %>

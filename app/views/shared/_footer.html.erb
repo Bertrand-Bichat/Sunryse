@@ -1,0 +1,29 @@
+<footer role="contentinfo" aria-label="pied de page" id="footer" class="bg-dark text-white">
+  <div class="container mt-1">
+    <div class="row align-items-center justify-content-between">
+
+      <!-- icons réseaux sociaux -->
+      <div class="col-12 col-lg-3 text-center text-lg-left mb-4" aria-label="liens vers nos réseaux sociaux">
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" title="compte Facebook" aria-label="page facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" title="compte Instagram" aria-label="compte Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+
+      <!-- CGV & contact -->
+      <address class="col-12 col-lg-9 d-flex flex-column flex-md-row justify-content-around text-center">
+        <p><%= link_to 'Conditions Générales de Vente', cgv_path, class: "text-decoration-none text-14", target: "_blank", rel: "noopener noreferrer" %></p>
+        <p><%= link_to 'Contactez-nous', new_message_path, class: "text-decoration-none text-14", target: "_blank", rel: "noopener noreferrer" %></p>
+        <p class="text-14" aria-label="addresse mail de contact"><%= ENV['SUNRYSE_EMAIL'] %></p>
+      </address>
+
+    </div>
+  </div>
+
+  <!-- copyright -->
+  <div class="bg-black text-center">
+    <div class="container d-flex flex-column flex-lg-row justify-content-between align-items-center">
+      <small class="font-weight-bold text-center my-2">Tous droits réservés | SUNRYSE 2021</small>
+      <small class="mb-2 mb-lg-0 web-developer" aria-label="créateur du site"><em>Site créé par <a href="https://bertrand-bichat.github.io/" class="text-primary text-decoration-none" target="_blank" rel="noopener noreferrer author" title="créateur du site">Bertrand Bichat</a></em></small>
+    </div>
+  </div>
+
+</footer>

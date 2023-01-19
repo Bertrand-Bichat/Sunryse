@@ -1,0 +1,38 @@
+<div class="row text-center mt-5">
+
+  <% users.each do |user| %>
+    <div class="col-12 col-md-6 col-lg-3 match-avatar my-5" title="<%= user.pseudo %>" id="user-<%= user.id %>">
+
+      <%= link_to profil_path(user.slug), class: "text-decoration-none font-weight-bold" do %>
+
+        <!-- avatar -->
+        <% if user.avatar.attached? %>
+          <div>
+            <% if user.avatar.content_type == mp4_content_type %>
+              <%= cl_video_tag user.avatar.key, transformation: [ height: 105, width: 105, crop: "fill", radius: 'max' ], class: "mt-2", alt: 'avatar', loading: 'lazy' %>
+            <% else %>
+              <%= cl_image_tag user.avatar.key, crop: :fill, class: "avatar-extralarge my-2", alt: 'avatar', loading: 'lazy' %>
+            <% end %>
+          </div>
+        <% else %>
+          <i class="fas fa-user my-2 profil-match"></i>
+        <% end %>
+        <br>
+        <%= user.pseudo %>
+
+        <!-- green dot -->
+        <% if user.online? %>
+          <div class="<%= user.avatar.attached? ? "dot-avatar" : "dot" %>"></div>
+        <% end %>
+
+      <% end %>
+
+      <% if request.fullpath == "/mes-favoris" %>
+        <% favorite = policy_scope(Favorite).where(user_id: current_user.id, profile_id: user.id).first %>
+        <%= link_to favorite_path(favorite.id), remote: true, method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir retirer ce profil de vos favoris ?' }, aria: { label: 'Supprimer de mes favoris' }, class: "ml-2" do %>
+          <i class="far fa-trash-alt text-orange" title="Retirer ce profil de mes favoris"></i>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

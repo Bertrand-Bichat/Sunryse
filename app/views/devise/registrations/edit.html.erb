@@ -1,0 +1,335 @@
+<% content_for :meta_title, "SUNRYSE | Mon compte"%>
+
+<div class="bg-gradient">
+
+  <div class="d-flex flex-column flex-md-row">
+    <div class="col-12 col-md-3 text-center text-md-left p-0 m-0">
+      <%= link_to home_path do %>
+        <% if @page.main_logo.attached? %>
+          <%= cl_image_tag @page.main_logo.key, width: 200, alt: "logo SUNRYSE", class: "p-0 m-0", loading: 'lazy' %>
+        <% else %>
+          <%= image_tag 'logo_main.png', width: 200, alt: 'logo SUNRYSE', class: "p-0 m-0", loading: 'lazy' %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-12 col-md-6">
+      <h1 class="title text-bold text-center mx-auto mt-5 text-uppercase">mon compte sunryse</h1>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="row py-5">
+
+      <div class="col">
+      </div>
+
+      <div class="col-12 col-md-10 mb-5">
+        <div class="border rounded px-3 pt-3 mb-5 bg-white">
+
+          <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+            <%= f.error_notification %>
+            <%= render "devise/shared/error_messages", resource: resource %>
+
+            <div class="form-inputs">
+              <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+                <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+              <% end %>
+
+              <div class="accordion" id="accordionExample">
+
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left text-decoration-none font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Mes informations personnelles
+                      </button>
+                    </h2>
+                  </div>
+
+                  <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <%= f.input :email, required: true %>
+
+                      <% unless policy(:page).admin_dashboard? %>
+                        <%= f.input :pseudo,
+                                    required: true,
+                                    label: 'Mon pseudo',
+                                    input_html: { autocomplete: 'pseudo' } %>
+                        <%= f.input :address,
+                                    required: true,
+                                    hint: 'Votre adresse restera secrète. Seule votre ville sera affichée sur votre profil.',
+                                    label: 'Mon adresse postale',
+                                    input_html: { class: "address-input", id: "flat_address", autocomplete: 'address' } %>
+                        <%= f.input :gender,
+                                    required: true,
+                                    label: 'Je suis',
+                                    collection: gender_choice,
+                                    as: :radio_buttons,
+                                    input_html: { autocomplete: 'gender' } %>
+                        <%= f.input :birthday,
+                                    required: true,
+                                    label: 'Ma date de naissance',
+                                    start_year: Date.today.year - 100,
+                                    end_year: Date.today.year - 17,
+                                    order: [:day, :month, :year],
+                                    input_html: { autocomplete: 'birthday' } %>
+                        <%= f.input :shape,
+                                    required: true,
+                                    label: 'Ma silhouette',
+                                    collection: shape_choice,
+                                    as: :radio_buttons,
+                                    input_html: { autocomplete: 'shape' } %>
+                        <%= f.input :hair,
+                                    required: true,
+                                    label: 'Couleur de mes cheveux',
+                                    collection: hair_choice,
+                                    as: :radio_buttons,
+                                    input_html: { autocomplete: 'hair' } %>
+                        <%= f.input :eye,
+                                    required: true,
+                                    label: 'Couleur des mes yeux',
+                                    collection: eye_choice,
+                                    as: :radio_buttons,
+                                    input_html: { autocomplete: 'eye' } %>
+                        <p class="p-form">Je coche les cases qui me concernent :</p>
+                        <%= f.input :smoke,
+                                    label: 'Je fume',
+                                    input_html: { autocomplete: 'smoke' } %>
+                        <%= f.input :want_child,
+                                    label: "J'ai un/des enfant(s)",
+                                    input_html: { autocomplete: 'want_child' } %>
+                        <%= f.input :lives_alone,
+                                    label: 'Je vis seul(e)',
+                                    input_html: { autocomplete: 'lives_alone' } %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+
+                <% unless policy(:page).admin_dashboard? %>
+                  <div class="card">
+                    <div class="card-header" id="headingTwo">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left text-decoration-none font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Ma description de profil
+                        </button>
+                      </h2>
+                    </div>
+
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                      <div class="card-body">
+                        <%= f.input :introduction,
+                                    label: "Ma phrase d'introduction",
+                                    hint: '100 caractères maximum',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'introduction' },
+                                    as: :ckeditor %>
+                        <%= f.input :description,
+                                    label: 'Ma description',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'description' },
+                                    as: :ckeditor %>
+                        <%= f.input :hobbies,
+                                    label: 'Mes loisirs',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'hobbies' },
+                                    as: :ckeditor %>
+                        <%= f.input :job,
+                                    label: 'Ma/mes profession(s)',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'job' },
+                                    as: :ckeditor %>
+                        <%= f.input :qualities,
+                                    label: 'Mes qualités',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'qualities' },
+                                    as: :ckeditor %>
+                        <%= f.input :defaults,
+                                    label: 'Mes défauts',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'defaults' },
+                                    as: :ckeditor %>
+                        <%= f.input :beliefs,
+                                    label: 'Mes croyances',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'beliefs' },
+                                    as: :ckeditor %>
+                        <%= f.input :projects,
+                                    label: 'Mes projets',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'projects' },
+                                    as: :ckeditor %>
+                        <%= f.input :movies,
+                                    label: 'Mes films et séries préférées',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'movies' },
+                                    as: :ckeditor %>
+                        <%= f.input :books,
+                                    label: 'Mes livres préférées',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'books' },
+                                    as: :ckeditor %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header" id="headingThree">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left text-decoration-none font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Mes critères de recherche
+                        </button>
+                      </h2>
+                    </div>
+
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                      <div class="card-body">
+                        <%= f.input :gender_criteria,
+                                    required: true,
+                                    label: 'Je cherche',
+                                    collection: gender_choice,
+                                    as: :radio_buttons,
+                                    input_html: { autocomplete: 'gender_criteria' } %>
+                        <%= f.input :goal,
+                                    required: true,
+                                    label: 'Pour',
+                                    collection: goal_choice,
+                                    as: :radio_buttons,
+                                    input_html: { autocomplete: 'goal' } %>
+                        <%= f.input :min_age,
+                                    required: true,
+                                    label: 'Âge minimum',
+                                    input_html: { min: 18, max: 100, autocomplete: 'min_age' } %>
+                        <%= f.input :max_age,
+                                    required: true,
+                                    label: 'Âge maximum',
+                                    input_html: { min: 18, max: 100, autocomplete: 'max_age' } %>
+                        <%= f.input :perimeter_criteria,
+                                    required: true,
+                                    label: 'Localisation (km)',
+                                    input_html: { min: 0, max: 50000, autocomplete: 'perimeter_criteria' } %>
+                        <%= f.input :shape_criteria,
+                                    required: true,
+                                    label: 'Silhouette(s)',
+                                    hint: 'plusieurs réponses possibles',
+                                    collection: shape_choice,
+                                    as: :check_boxes,
+                                    input_html: { autocomplete: 'shape_criteria' } %>
+                        <%= f.input :i_want,
+                                    label: 'Ce que je veux',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'i_want' },
+                                    as: :ckeditor %>
+                        <%= f.input :i_dont_want,
+                                    label: 'Ce que je ne veux pas',
+                                    input_html: { rows: 15, ckeditor: { toolbar: 'Full', language: 'fr' }, autocomplete: 'i_dont_want' },
+                                    as: :ckeditor %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header" id="headingFour">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left text-decoration-none font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                          Couleurs sur mon profil
+                        </button>
+                      </h2>
+                    </div>
+
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                      <div class="card-body">
+                        <%= f.input :bg_color,
+                                    as: :color,
+                                    label: 'Ma couleur de fond',
+                                    input_html: { class: "w-25", autocomplete: 'bg_color' },
+                                    hint: 'choisissez la couleur de fond de votre page profil' %>
+                        <%= f.input :avatar_border_color,
+                                    as: :color,
+                                    label: 'Ma couleur de contour',
+                                    input_html: { class: "w-25", autocomplete: 'avatar_border_color' },
+                                    hint: 'choisissez la couleur de contour de votre avatar sur votre page profil' %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header" id="headingFive">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left text-decoration-none font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                          Gestion de mes notifications
+                        </button>
+                      </h2>
+                    </div>
+
+                    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                      <div class="card-body">
+                        <%= f.input :notification_profil_seen,
+                                    label: 'Je reçois une notification par mail à chaque fois que mon profil est vu',
+                                    input_html: { autocomplete: 'notification_profil_seen' } %>
+                        <%= f.input :notification_favorite_added,
+                                    label: "Je reçois une notification par mail à chaque fois qu'un autre utilisateur m'ajoute dans sa liste de favoris",
+                                    input_html: { autocomplete: 'notification_favorite_added' } %>
+                        <%= f.input :notification_contact_request_readed,
+                                    label: 'Je reçois une notification par mail à chaque fois que mes demandes de contact sont vues',
+                                    input_html: { autocomplete: 'notification_contact_request_readed' } %>
+                        <%= f.input :notification_contact_request_accepted,
+                                    label: 'Je reçois une notification par mail à chaque fois que mes demandes de contact sont acceptées',
+                                    input_html: { autocomplete: 'notification_contact_request_accepted' } %>
+                        <%= f.input :notification_contact_request_received,
+                                    label: 'Je reçois une notification par mail à chaque fois que je reçois des demandes de contact',
+                                    input_html: { autocomplete: 'notification_contact_request_received' } %>
+                        <%= f.input :notification_post_received,
+                                    label: 'Je reçois une notification par mail à chaque fois que je reçois un message privé',
+                                    input_html: { autocomplete: 'notification_post_received' } %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+
+                <div class="card">
+                  <div class="card-header" id="headingSix">
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left text-decoration-none font-weight-bold" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Nouveau mot de passe
+                      </button>
+                    </h2>
+                  </div>
+
+                  <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <%= f.input :password,
+                                  hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length) + " (ne remplissez pas ce champ si vous souhaitez conserver votre mot de passe)",
+                                  required: false,
+                                  label: 'Nouveau mot de passe',
+                                  input_html: { autocomplete: 'new-password' } %>
+                      <%= f.input :password_confirmation,
+                                  hint: 'ne remplissez pas ce champ si vous souhaitez conserver votre mot de passe',
+                                  required: false,
+                                  label: 'Confirmation du nouveau mot de passe',
+                                  input_html: { autocomplete: 'new-password' } %>
+<!--                       <%= f.input :current_password,
+                                  hint: 'ne remplissez pas ce champ si vous souhaitez conserver votre mot de passe, les autres modifications peuvent se faire sans celui-ci.',
+                                  required: false,
+                                  label: 'Mot de passe actuel',
+                                  input_html: { autocomplete: 'current_password' } %> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-actions mt-4">
+              <%= f.button :submit, 'Mettre à jour', class: "btn btn-primary w-100 my-3 py-2" %>
+              <%= link_to 'Annuler', :back, class: "btn btn-primary mb-3 w-100 py-2"  %>
+            </div>
+          <% end %>
+
+          <!-- delete user account -->
+          <div class="text-center mt-5">
+            <h3 class="mb-4 w-100 bg-dark text-white py-2">Supprimer mon compte</h3>
+            <p><span class="mr-4">Vous souhaitez nous quitter ?</span> <%= link_to "Supprimer", registration_path(resource_name), method: :delete, data: { confirm: "#{resource.pseudo}, êtes-vous sûr de vouloir supprimer votre compte personnel sur le site de SUNRYSE ? Ce choix est définitf et sans retour possible." }, class: "btn btn-delete-account", aria: { label: 'bouton pour supprimer définitivement mon compte personnel' } %></p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

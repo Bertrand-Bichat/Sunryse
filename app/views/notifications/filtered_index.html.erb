@@ -1,0 +1,56 @@
+<div class="bg-gradient d-flex justify-content-around">
+  <div class="publications-width bg-white p-2 p-md-5">
+
+    <!-- title -->
+    <h1 class="text-center">
+      Mes notifications
+      <span class="<%= @nbr_new_notifications.positive? ? 'counter' : '' %>">
+        <%= @nbr_new_notifications.positive? ? @nbr_new_notifications : '' %>
+      </span>
+    </h1>
+
+    <div class="col-12 mt-5">
+
+      <!-- user notifications -->
+      <% if @user_notifications.empty? %>
+
+        <p><em>aucune</em></p>
+
+      <% else %>
+
+        <% @user_notifications.each do |notification| %>
+          <div class="notification" id="notification-<%= notification.id %>">
+            <% if notification.sender.avatar.attached? %>
+              <% if notification.sender.avatar.content_type == mp4_content_type %>
+                <%= cl_video_tag notification.sender.avatar.key, transformation: [ crop: "fill" ], class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+              <% else %>
+                <%= cl_image_tag notification.sender.avatar.key, crop: :fill, class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+              <% end %>
+            <% else %>
+              <%= image_tag 'avatar-profil.png', class: "avatar-large", alt: 'avatar', loading: 'lazy' %>
+            <% end %>
+            <div class="notification-content">
+              <p>
+                <p class="text-dark"><%= notification.created_at.to_date.strftime("%d/%m/%Y") %>, <%= link_to notification.sender.pseudo, profil_path(notification.sender.slug), class: "text-decoration-none font-weight-bold" %></p>
+                <i class="fas fa-exclamation-circle ml-3 color-red <%= notification.readed ? 'hidden' : '' %>"></i>
+              </p>
+              <p><%= notification.content %></p>
+            </div>
+            <div class="notification-actions">
+              <% if policy(notification).hide_notification? %>
+                <p>
+                  <%= link_to hide_notification_path(notification.id), remote: true, method: :patch, aria: { label: 'cacher cette notification' } do %>
+                    <i class="fas fa-eye-slash text-orange" title="Cacher cette notification"></i>
+                  <% end %>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+        <%= will_paginate @user_notifications, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>

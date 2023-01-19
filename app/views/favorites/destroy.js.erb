@@ -1,0 +1,12 @@
+user = document.getElementById('user-<%= @user_favorite.id %>');
+number = document.getElementById('number');
+
+// cache le profile retiré des favoris
+user.style.display = 'none';
+
+// décrémente le compteur de favoris
+integer = parseInt(number.innerHTML);
+--integer;
+
+// remplace le texte par la nouvelle valeure
+number.innerHTML = integer.toString();

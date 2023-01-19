@@ -1,0 +1,7 @@
+contactRequest = document.getElementById('cr-<%= @contact_request.id %>');
+btnAccepted = contactRequest.querySelector('.btn-accepted');
+iconAccepted = contactRequest.querySelector('.icon-accepted');
+
+// hidden the btn and display icon
+btnAccepted.classList.add('hidden');
+iconAccepted.classList.remove('hidden');

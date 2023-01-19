@@ -1,0 +1,5 @@
+meta_product_name: "SUNRYSE"
+meta_title: "SUNRYSE - site de rencontre inclusif"
+meta_description: "SUNRYSE est un site de rencontre inclusif destiné à tous les profils, quel qu'il soient."
+meta_image: "logo_sunryse2.png" # should exist in `app/assets/images/`
+# twitter_account: "@product_twitter_account"   # required for Twitter Cards

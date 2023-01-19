@@ -1,0 +1,22 @@
+<div class="bg-gradient">
+  <div class="container bg-white py-5">
+
+    <!-- title -->
+    <h1 class="text-center">Historique de mes commandes payées</h1>
+
+    <!-- paid order -->
+    <div class="my-5">
+      <% if @paid_orders.empty? %>
+        <p class="text-center"><em>aucune</em></p>
+      <% else %>
+        <div class="row">
+          <% @paid_orders.each do |order| %>
+            <%= render 'shared/order_card', order: order %>
+          <% end %>
+        </div>
+        <%= will_paginate @paid_orders, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      <% end %>
+    </div>
+
+  </div>
+</div>

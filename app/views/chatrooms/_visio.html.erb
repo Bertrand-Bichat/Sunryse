@@ -1,0 +1,62 @@
+<div class="data-visio" data-token="<%= token %>" data-room-name="<%= room_name %>"></div>
+
+<div id="visio-bloc" class="">
+
+  <div id="local-bloc" class="">
+    <!-- div où vient se loger le rendu de la vidéo du current_user -->
+    <div id="local-media" class="media">
+    </div>
+  </div>
+
+  <div id="actions-bloc">
+    <div id="fictive"></div>
+    <div>
+      <div id="btn-video-disconnect" class="btn-visio">
+        <i class="fas fa-phone"><span>Quitter la visio</span></i>
+      </div>
+      <div id="btn-video-mute" class="btn-visio">
+        <i class="fas fa-microphone-alt current"><span>Désactiver le micro</span></i>
+        <i class="fas fa-microphone-alt-slash action"><span>Activer le micro</span></i>
+      </div>
+      <div id="btn-video-stop" class="btn-visio">
+        <i class="fas fa-video current"><span>Désactiver la caméra</span></i>
+        <i class="fas fa-video-slash action"><span>Activer la caméra</span></i>
+      </div>
+    </div>
+    <div id="btn-video-fullscreen" class="btn-visio">
+      <i class="fas fa-expand current"><span>Plein écran</span></i>
+      <i class="fas fa-compress action"><span>Réduire</span></i>
+    </div>
+    <div id="btn-video-mobile-devise" class=""></div>
+  </div>
+
+  <div id="remote-bloc" class="">
+    <div id="btn-video-preview" class="btn btn-primary my-2 p-4 center-btn">Tester mon matériel</div>
+    <div id="btn-video-connect" class="btn btn-primary p-4 center-btn"><span class="">Rejoindre la visio</span></div>
+
+    <!-- message d'attente si l'autre personne n'est pas connectée à la visio-->
+    <div id="message">
+      En attente de la connexion
+      <% if current_user == chatroom.speaker1 %>
+        de <%= chatroom.speaker2.pseudo %>.
+      <% elsif current_user == chatroom.speaker2 %>
+        de <%= chatroom.speaker1.pseudo %>.
+      <% end %>
+    </div>
+
+    <!-- div où vient se loger le rendu de la vidéo de l'autre user -->
+    <div id="remote-media" class="media"></div>
+
+<!--     <div id="remote-sound-state">
+      <i class="fas fa-volume-up current"></i>
+      <i class="fas fa-volume-mute action"></i>
+    </div> -->
+  </div>
+
+  <!-- icône pour demander de basculer son mobile en mode paysage -->
+<!--   <div id="mobile-orientation-alert">
+    <i class="fas fa-mobile-alt" id="mobile"></i>
+    <i class="fas fa-undo" id="arrow"></i>
+  </div> -->
+
+</div>

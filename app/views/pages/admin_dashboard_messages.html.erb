@@ -1,0 +1,40 @@
+<div class="container my-5">
+  <p>
+    <%= link_to admin_dashboard_path, class: "btn btn-primary" do %>
+      <i class="fas fa-chevron-left"></i> Retour
+    <% end %>
+  </p>
+  <h1 class="text-center mt-5">Liste des messages envoyés sur la page "Contact"</h1>
+
+  <!-- messages -->
+  <div class="row my-5 border-top border-dark">
+
+    <h2 class="ml-3 mt-5"><%= @messages_number %> messages envoyés</h2>
+    <table class="table table-hover table-responsive text-center col-12 mt-2">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Envoyé le</th>
+          <th scope="col">Prénom</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Email</th>
+          <th scope="col">Téléphone</th>
+          <th scope="col">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @messages.each do |message| %>
+          <tr>
+            <td><%= message.created_at.to_date.strftime("%d/%m/%Y") %></td>
+            <td><%= message.first_name %></td>
+            <td><%= message.last_name %></td>
+            <td><%= message.email %></td>
+            <td><%= message.phone_number %></td>
+            <td><%= message.content %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

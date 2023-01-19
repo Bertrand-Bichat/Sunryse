@@ -1,0 +1,13 @@
+<%= simple_form_for(order, method: :post, url: { controller: "orders", action: "create" }) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <div class="">
+    <%= f.hidden_field :duration, value: duration %>
+    <%= f.hidden_field :order_type, value: order_type %>
+    <%= f.hidden_field :amount_cents, value: amount_cents %>
+    <%= f.hidden_field :camera_credits, value: camera_credits %>
+  </div>
+  <div>
+    <%= f.button :submit, 'Payer', class: "btn btn-primary current-order-button hidden", id: "order-button" %>
+  </div>
+<% end %>

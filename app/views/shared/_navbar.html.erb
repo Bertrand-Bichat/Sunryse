@@ -1,0 +1,266 @@
+<header>
+  <nav role="navigation" aria-label="menu principale de navigation">
+    <div class="col-12 bg-red py-1"></div>
+
+    <div class="navbar navbar-expand-xl navbar-light navbar-lewagon bg-blue">
+
+      <!-- Logo -->
+      <div class="col-1 navbar-brand mb-3">
+        <% if @page.navbar_logo.attached? %>
+          <%= cl_image_tag @page.navbar_logo.key, width: 110, alt: "dessin d'un soleil - logo", loading: 'lazy' %>
+        <% else %>
+          <%= image_tag 'logo_navbar.png', width: 110, alt: "dessin d'un soleil - logo", loading: 'lazy' %>
+        <% end %>
+      </div>
+
+      <!-- ninja mode status -->
+      <% if current_user && current_user.ninja_activated? %>
+        <div class="col-3 col-xl-1 navbar-brand border bg-red text-white">
+          <div role="timer" aria-label="Minuteur du mode invisible" class="text-wrap text-center" id="ninja-timer">Mode invisible <span id="timer-value"></span></div>
+        </div>
+      <% end %>
+
+      <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Afficher le menu de navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- icônes intéractives navbar -->
+      <div class="col-10 d-flex justify-content-between align-items-center">
+
+        <!-- Avatar & scrolling menu -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav">
+
+            <% if user_signed_in? %>
+
+              <!-- accueil -->
+              <li class="nav-item">
+                <%= link_to publications_path, class: "nav-link mr-4 mt-3", aria: { label: 'mur des publications' } do %>
+                  <i class="fas fa-home border-navbar bg-white p-2" title="mur des publications"></i>
+                <% end %>
+              </li>
+
+              <% unless current_user.admin? %>
+
+                <!-- recherche -->
+                <li class="nav-item dropdown mt-3">
+                  <!-- icon dropdown menu -->
+                  <div class="cursor-click" id="searchDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <p>
+                      <%= link_to '', class: "nav-link mt-0 mt-xl-5", aria: { label: 'formulaire de recherche par mots-clés et géolocalisation' } do %>
+                        <i class="fas fa-search border-navbar bg-white p-2" title="recherche"></i>
+                      <% end %>
+                    </p>
+                  </div>
+                  <!-- Scrolling menu -->
+                  <ul class="dropdown-menu dropdown-menu-right px-3" aria-labelledby="searchDropdown">
+                    <li class="d-flex justify-content-around border-bottom border-dark mt-3 pb-4" aria-label="recherche par mots-clés">
+                      <%= form_tag search_profils_path, method: :get, role: "search" do %>
+                        <%= label_tag(:query, 'Recherche profils par mots-clés') %>
+                        <%= text_field_tag :query,
+                          params[:query],
+                          class: "form-control",
+                          placeholder: "mot-clé"
+                        %>
+                        <%= submit_tag 'Recherche', class: "btn btn-primary w-100 mt-2 px-5" %>
+                      <% end %>
+                      <br>
+                    </li>
+                    <li aria-label="géolocalisation des autres utilisateurs dans un rayon de 5 km">
+                      <br>
+                      <p>
+                        Profils à côté de ma position actuelle :
+                        <%= link_to next_to_current_position_path, class: "btn btn-primary w-100 mt-2 px-5" do %>
+                          Voir
+                        <% end %>
+                      </p>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- profils-->
+                <li class="nav-item" aria-label="profils compatibles avec mes critères de recherche">
+                  <p>
+                    <%= link_to profil_match_path, class: "nav-link mt-0 mt-xl-4 border-navbar icon bg-white" do %>
+                      Profils
+                    <% end %>
+                  </p>
+                </li>
+
+                <!-- chevron -->
+                <li class="nav-item dropdown mt-0 mt-xl-3 mr-4">
+                  <!-- icon dropdown menu -->
+                  <div class="cursor-click" id="chevronDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <p>
+                      <%= link_to '', class: "nav-link mt-0 mt-xl-5", aria: { label: 'rechercher les profils compatibles avec moi et liste de mes notifications, messages, demandes de contact, profils bloqués' } do %>
+                        <i class="fas fa-chevron-down border-navbar bg-white p-2" title="dérouler"></i>
+                      <% end %>
+                    </p>
+                  </div>
+                  <!-- Scrolling menu -->
+                  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="chevronDropdown">
+                    <li><%= link_to 'Mes profils compatibles', profil_match_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Notifications', notifications_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Messages', chatrooms_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Demandes de contact', contact_requests_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Mes profils bloqués', blockages_path, class: "dropdown-item" %></li>
+                  </ul>
+                </li>
+
+                <!-- toutes les stories -->
+                <li class="nav-item" aria-label="voir les photos et vidéos partagées par les autres utilisateurs">
+                  <p>
+                    <%= link_to all_stories_path, class: "nav-link mt-3 mt-xl-4 border-navbar icon bg-white" do %>
+                      Stories
+                    <% end %>
+                  </p>
+                </li>
+
+                <!-- ajouter une story -->
+                <li class="nav-item mt-0 mt-xl-3">
+                  <a data-toggle="modal" data-target="#form-stories" class="nav-link mr-4 mt-0 mt-xl-5 cursor-click" aria-label="ajouter une ou plusieurs photos ou vidéos à ma story">
+                    <i class="fas fa-plus border-navbar bg-white p-2" title="ajouter une story"></i>
+                  </a>
+                  <!-- Modal -->
+                  <% if current_user && current_user.authorized? %>
+                    <div class="modal fade" id="form-stories" tabindex="-1" role="dialog" aria-label="ajouter des photos et vidéos à ma story" aria-modal="true" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body text-left">
+                            <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+                              <%= f.error_notification %>
+
+                              <div class="form-inputs">
+                                <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+                                  <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+                                <% end %>
+                                <%= f.input :stories,
+                                            as: :file,
+                                            input_html: { multiple: true },
+                                            label: 'Nouvelles stories (images et vidéos)',
+                                            hint: '10 Mo max par story, formats acceptés : JPG, JPEG, PNG, MP4' %>
+                              </div>
+                              <div class="form-actions">
+                                <%= f.button :submit, 'Ajouter', class: "btn btn-primary w-100", id: "stories-btn" %>
+                              </div>
+                            <% end %>
+                            <!-- loading spinner -->
+                            <button class="btn btn-primary w-100 hidden" id="stories-spinner" type="button" disabled>
+                              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              Téléchargement...
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </li>
+
+                <!-- mode invisible -->
+                <li class="nav-item">
+                  <% if (current_user.ninja_activated == false) && (current_user.ninja_time > 0) %>
+                    <a data-toggle="modal" data-target="#form-ninja" class="nav-link mr-4 mt-3 mt-xl-4 border-navbar icon bg-white cursor-click" aria-label="activer le mode invisible">
+                      Invisible
+                    </a>
+                    <% if current_user.authorized? %>
+                      <div class="modal fade" id="form-ninja" tabindex="-1" role="dialog" aria-label="mode invisible" aria-modal="true" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body text-left">
+                              <%= simple_form_for(@user, method: :patch, url: {controller: "notifications", action: "ninja_mode" }) do |f| %>
+                                <%= f.error_notification %>
+                                <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+                                <div class="">
+                                  <%= f.input :ninja_time,
+                                              label: 'Sélectionner une durée (en minutes)',
+                                              hint: "Vous disposez de 30 minutes par jour pour utilisez le mode invisible : les autres utilisateurs ne pourront pas savoir que vous avez visité leur profil quand vous êtes invisible. Il vous reste #{current_user.ninja_time} minutes pour aujourd'hui.",
+                                              input_html: { value: 0, min: 0, max: current_user.ninja_time, id: "ninja-time-input" } %>
+                                </div>
+                                <div>
+                                  <%= f.button :submit, 'Activer le mode invisible', class: "btn btn-primary w-100 text-center", id: "ninja-button" %>
+                                </div>
+                              <% end %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% elsif (current_user.ninja_activated == false) && (current_user.ninja_time == 0) %>
+                    <div class="nav-link ml-1 mr-4 mt-3" aria-label="Vous avez épuisé votre quota journalier du mode invisible">
+                      <i class="fas fa-ban border-navbar bg-white p-2" title="Vous avez épuisé votre quota journalier du mode invisible"></i>
+                    </div>
+                  <% else %>
+                    <div class="nav-link ml-1 mr-4 mt-3" aria-label="le mode invisible est déjà activé">
+                      <i class="fas fa-mask border-navbar bg-white p-2" title="Mode invisible déjà activé"></i>
+                    </div>
+                  <% end %>
+                </li>
+
+                <!-- panier -->
+                <li class="nav-item">
+                  <p>
+                    <%= link_to basket_path, class: "nav-link ml-1 mr-4 mt-3", aria: { label: "accéder aux commandes que j'ai initialisé, mais qui n'ont pas encore été payées" } do %>
+                      <i class="fas fa-shopping-basket border-navbar bg-white p-2" title="panier"></i>
+                    <% end %>
+                  </p>
+                </li>
+              <% end %>
+
+              <!-- paramètres -->
+              <li class="nav-item dropdown">
+                <!-- icon dropdown menu -->
+                <div class="cursor-click" id="parameterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <p>
+                    <%= link_to '', class: "nav-link mr-4 mt-3", aria: { label: 'paramètres' } do %>
+                      <i class="fas fa-cog border-navbar bg-white p-2" title="paramètres"></i>
+                    <% end %>
+                  </p>
+                </div>
+                <!-- Scrolling menu -->
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="parameterDropdown">
+                  <% if policy(:page).admin_dashboard? %>
+                    <li><%= link_to 'Tableau de bord', admin_dashboard_path, class: "dropdown-item" %></li>
+                  <% else %>
+                    <li><%= link_to 'Mon profil', profil_path(current_user.slug), class: "dropdown-item" %></li>
+                    <li><%= link_to 'Mes favoris', my_favorites_path, class: "dropdown-item" %></li>
+                    <li><%= link_to 'Mes commandes', orders_path, class: "dropdown-item" %></li>
+                    <% if current_user.gender == male %>
+                      <li><%= link_to 'Tarifs', choose_prices_path, class: "dropdown-item" %></li>
+                    <% end %>
+                  <% end %>
+                  <li><%= link_to 'Modifier mon profil', edit_user_registration_path, class: "dropdown-item" %></li>
+                  <% if !current_user.admin? %>
+                    <li><%= link_to 'Contacter Sunryse', new_message_path, class: "dropdown-item", target: "_blank", rel: "noopener noreferrer" %></li>
+                  <% end %>
+                  <li><%= link_to 'Se déconnecter', destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+                </ul>
+              </li>
+
+            <% else %>
+
+              <!-- Button to connect -->
+              <li class="nav-item">
+                <p><%= link_to 'Se connecter', root_path, class: "nav-link mt-xl-0 border-navbar icon bg-white cursor-click" %></p>
+              </li>
+
+            <% end %>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-12 bg-red py-1"></div>
+  </nav>
+</header>

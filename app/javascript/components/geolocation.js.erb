@@ -1,0 +1,23 @@
+function getUserPosition() {
+  navigator.geolocation.getCurrentPosition((position) => {
+    const url = `/update_position?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}`;
+    // console.log(url)
+    // faireQqc(position.coords.latitude, position.coords.latitude);
+    // console.log(position)
+    // const params = {latitude: position.coords.latitude, longitude: position.coords.longitude}
+    // url.search = new URLSearchParams(params).toString();
+    fetch(url, {credentials: "same-origin"}).then((response) => {
+      // console.log('geolocateUser test');
+      // console.log(response);
+    });
+  });
+};
+
+const geolocateUser = () => {
+  if ("geolocation" in navigator) {
+    getUserPosition();
+    setInterval(getUserPosition, 55000);
+  }
+}
+
+export { geolocateUser, getUserPosition };

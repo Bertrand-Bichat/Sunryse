@@ -1,0 +1,126 @@
+<div class="bg-gradient">
+  <div class="py-5">
+
+    <div class="d-flex flex-column flex-md-row">
+
+      <!-- list of all our chatrooms -->
+      <div id="chatrooms" class="order-1 order-md-1">
+        <div class="list-group w-200px bg-white br-light">
+          <% @chatrooms.each do |chatroom| %>
+            <% (current_user == chatroom.speaker1) ? (other_speaker = chatroom.speaker2) : (other_speaker = chatroom.speaker1) %>
+            <%= link_to chatroom_path(chatroom, anchor: chatroom.posts.empty? ? '' : "post-#{chatroom.posts.last.id}"), class: "list-group-item #{'active' if chatroom == @chatroom} d-flex align-items-center" do %>
+              # <%= other_speaker.pseudo %>
+              <!-- green dot -->
+              <% if other_speaker.online? %>
+                <div class="messages-green-dot ml-2"></div>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- current chatrooms -->
+      <div class="chatroom order-3 order-md-2">
+        <!-- user name -->
+        <h1 class="text-center">
+          <%= link_to profil_path(@other_speaker.slug), class: "text-decoration-none font-weight-bold d-flex align-items-center justify-content-center" do %>
+            # <%= @other_speaker.pseudo %>
+          <% end %>
+        </h1>
+
+        <div>
+          <div id="posts" data-chatroom-id="<%= @chatroom.id %>">
+            <% @chatroom.posts.each do |post| %>
+              <%= render "posts/post", post: post %>
+            <% end %>
+          </div>
+
+          <%= simple_form_for [ @chatroom, @post ], remote: true do |f| %>
+            <%= f.input :content, label: false, placeholder: 'Message', autofocus: true, aria: { label: 'écrire un message' } %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- visio -->
+      <div class="visio-conference order-2 order-md-3 p-3">
+        <!-- test internet browser -->
+        <%= render 'browser' %>
+
+        <!-- camera timer -->
+        <% if current_user.credit_activated? %>
+          <div role="timer" aria-label="Minuteur pour les échanges par caméra" class="text-wrap text-center bg-red text-white py-3 mt-4" id="camera-timer">
+            Temps de caméra restant : <span id="camera-timer-value"></span>
+          </div>
+        <% end %>
+        <span class="portrait-message">(Vous utilisez un appareil mobile, veuillez rester en mode portrait durant la visio, svp.)</span>
+
+        <!-- twilio visio -->
+        <div class="mt-4">
+          <%= render 'visio', token: @token, room_name: @room_name, chatroom: @chatroom %>
+        </div>
+
+        <!-- btn visio -->
+        <div class="border border-dark p-3 mt-4" id="credits-balance">
+          <p class="text-center">Il vous reste <%= current_user.camera_credits_balance %> crédits sur votre compte.</p>
+          <% if policy(@chatroom).use_credit? %>
+            <%= link_to use_credit_path(chatroom: @chatroom), remote: true, method: :patch, class: "btn btn-primary w-100", id: "btn-start-twilio-video" do %>
+              Activer la vidéo
+              <br>
+              <i class="fas fa-video"></i>
+            <% end %>
+          <% else %>
+            <p class="text-center"><em>Vous et/ou votre interlocuteur devez acheter des crédits pour pouvoir utiliser l'échange par caméra.</em></p>
+          <% end %>
+        </div>
+
+        <!-- credits form -->
+        <div class="text-center p-3 border border-dark mt-4" id="credits-form">
+          <label for="credits-input">
+            Achat de nouveaux crédits
+            <br>
+            (<%= humanized_money(camera_price) %> € l'unité, 1 crédit = <%= thirty_minutes %>)
+          </label>
+          <input type="number" id="credits-input" name="credits-input" min="1" value="1" required>
+          <%= link_to 'Acheter', current_order_path(order_type: order_type_camera), class: "btn btn-primary", id: "link-to" %>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // credits form
+  let creditsInput = document.querySelector('#credits-input');
+  let linkTo = document.querySelector('#link-to');
+  let href = linkTo.href;
+
+  // check credit_activated
+  const startVideoBtn = document.querySelector("#btn-start-twilio-video");
+
+  startVideoBtn?.addEventListener ('click', () => {
+    setInterval(function() {
+      Rails.ajax({
+        url: "/check-credit-activated",
+        type: "get",
+        dataType: "json",
+        error: function(data) { console.log("error with fecth"); },
+        success: function(data) {
+          if (data === false) {
+            document.location.reload(); // force to refresh the current page
+          }
+        }
+      })
+    }, 60000);  // 60 seconds
+  });
+
+  linkTo?.addEventListener ('mouseup', (event) => {
+    event.preventDefault();
+    let number = creditsInput.value;
+    let price = parseInt(number, 10)*<%= camera_price %>;
+    let newHref = href + `&camera_credits=${number}&amount=${price}`;
+    linkTo.href = newHref;
+    linkTo.click();
+  });
+</script>

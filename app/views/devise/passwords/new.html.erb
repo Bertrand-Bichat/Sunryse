@@ -1,0 +1,49 @@
+<% if @page.background_photo.attached? %>
+  <div class="banner" style="background-image: url('<%= cl_image_path @page.background_photo.key %>')">
+<% else %>
+  <div class="banner" style="background-image: url('<%= image_path 'home2.jpg' %>')">
+<% end %>
+
+  <%= link_to home_path do %>
+    <%= render 'devise/shared/home_logo' %>
+  <% end %>
+
+  <div class="container text-left">
+
+    <div class="row my-5">
+
+      <div class="col">
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-5 mb-5 mr-5">
+        <div class="border rounded px-4 pt-4 mb-5 bg-white">
+
+          <h2 class="text-bold text-center mb-5">Mot de passe oublié ?</h2>
+
+          <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+            <%= f.error_notification %>
+
+            <div class="form-inputs">
+              <%= f.input :email,
+                          required: true,
+                          label: 'Email',
+                          input_html: { autocomplete: 'email' } %>
+            </div>
+
+            <div class="form-actions mb-4">
+              <%= f.button :submit, 'Réinitialiser mon mot de passe', class: "btn btn-primary w-100" %>
+            </div>
+            <p class="mt-3">Première visite ? <%= link_to 'Créer un compte',  new_user_registration_path, class: "text-decoration-none font-weight-bold" %></p>
+            <p>Déja un compte ? <%= link_to 'Se connecter', root_path, class: "text-decoration-none font-weight-bold" %> </p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

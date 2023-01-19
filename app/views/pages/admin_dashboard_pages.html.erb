@@ -1,0 +1,40 @@
+<div class="container my-5">
+  <p>
+    <%= link_to admin_dashboard_path, class: "btn btn-primary" do %>
+      <i class="fas fa-chevron-left"></i> Retour
+    <% end %>
+  </p>
+  <h1 class="text-center mt-5">Liste des pages dont le texte est modifiable par l'administrateur</h1>
+
+  <!-- messages -->
+  <div class="row my-5 border-top border-dark">
+
+    <h2 class="ml-3 mt-5"><%= @pages_number %> pages modifiables</h2>
+    <table class="table table-hover table-responsive text-center col-12 mt-2">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Nom de la page</th>
+          <th scope="col">N° d'identification</th>
+          <th scope="col">Bouton pour modifier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pages.each do |page| %>
+          <tr>
+            <td><%= page.tag %></td>
+            <td><%= page.id %></td>
+            <td>
+              <% if policy(page).edit? %>
+                <%= link_to edit_page_path(page.id), aria: { label: 'Modifier la page' } do %>
+                  <i class="fas fa-edit text-orange" title="Modifier cette page"></i>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

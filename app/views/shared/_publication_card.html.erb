@@ -1,0 +1,48 @@
+<div class="col-12 border px-3 pt-3 pb-0 mb-3" id="<%= publication.id %>">
+  <div class="d-flex justify-content-between">
+
+    <!-- content -->
+    <p class="<%= publication.user == current_user ? 'order-1' : 'order-2' %> text-wrap">
+      <%= publication.content %>
+    </p>
+
+    <div class="<%= publication.user == current_user ? 'order-2 ml-5' : 'order-1 mr-5' %>">
+
+      <!-- author -->
+      <p>
+        <% if publication.user.admin? %>
+          <span class="text-orange font-weight-bold"><%= publication.user.pseudo %></span>
+        <% else %>
+          <%= link_to profil_path(publication.user.slug), class: "font-weight-bold" do %>
+            <%= publication.user.pseudo %>
+          <% end %>
+        <% end %>
+      </p>
+
+      <!-- date -->
+      <p class="text-dark"><%= publication.created_at.to_date.strftime("%d/%m/%Y") %></p>
+
+      <!-- buttons to edit and delete -->
+      <div class="d-flex justify-content-end">
+        <!-- edit -->
+        <% if policy(publication).edit? %>
+          <p class="mr-3">
+            <%= link_to edit_publication_path(publication.id), aria: { label: 'Modifier ma publication' } do %>
+              <i class="fas fa-edit text-orange" title="Modifier cette publication"></i>
+            <% end %>
+          </p>
+        <% end %>
+        <!-- delete -->
+        <% if policy(publication).destroy? %>
+          <p>
+            <%= link_to publication_path(publication.id), remote: true, method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir supprimer cette publication ?' }, aria: { label: 'Supprimer ma publication' } do %>
+              <i class="fas fa-trash-alt text-orange" title="Supprimer cette publication"></i>
+            <% end %>
+          </p>
+        <% end %>
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.bg-gradient {
+  background: linear-gradient($orange, $yellow);
+  font-size: 1.1rem;
+  min-height: 100vh;
+}
+
+.bg-orange {
+  background-color: $orange;
+}
+
+.bg-blue {
+  background-color: $blue;
+}
+
+.bg-red {
+  background-color: $red;
+  &:hover {
+    background-color: $red;
+  }
+}

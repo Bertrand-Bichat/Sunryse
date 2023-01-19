@@ -1,0 +1,20 @@
+#chatrooms {
+  height: calc(100vh - 66px);
+}
+
+.list-group {
+  overflow: scroll;
+  max-height: calc(100vh - 66px);
+}
+
+.list-group-item {
+  border: 2px solid grey;
+  color: #2d2222;
+}
+
+.list-group-item.active {
+  background-color: #fff;
+  border-color: initial;
+  color: #2d2222;
+  font-weight: bold;
+}

@@ -1,0 +1,7 @@
+<div class="post-container" id="post-<%= post.id %>">
+  <i class="author">
+    <span><%= post.user.pseudo %></span>
+    <small class="text-dark"><%= post.created_at.localtime.strftime("le %d/%m/%Y à %k:%M") %></small>
+  </i>
+  <p><%= post.content %></p>
+</div>

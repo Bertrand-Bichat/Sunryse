@@ -1,0 +1,55 @@
+<div class="container my-5">
+  <p>
+    <%= link_to admin_dashboard_path, class: "btn btn-primary" do %>
+      <i class="fas fa-chevron-left"></i> Retour
+    <% end %>
+  </p>
+  <h1 class="text-center mt-5">Liste des clients</h1>
+
+  <!-- customers -->
+  <div class="row my-5 border-top border-dark">
+
+    <h2 class="ml-3 mt-5"><%= @customers_number %> clients</h2>
+    <table class="table table-hover table-responsive text-center col-12 mt-2">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">En ligne ?</th>
+          <th scope="col">Client</th>
+          <th scope="col">ID</th>
+          <th scope="col">Email</th>
+          <th scope="col">Inscrit depuis le</th>
+          <th scope="col">Bannir le compte</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @customers.each do |user| %>
+          <tr>
+            <td class="table-dot">
+              <% if user.banned? %>
+                <div class="dot-banned" title="Banni"></div>
+              <% elsif user.online? %>
+                <div class="dot-online" title="Oui"></div>
+              <% else %>
+                <div class="dot-not-online" title="Non"></div>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to profil_path(user.slug), class: "text-dark" do %>
+                <%= user.pseudo %>
+              <% end %>
+            </td>
+            <td><%= user.id %></td>
+            <td><%= user.email %></td>
+            <td><%= user.created_at.to_date.strftime("%d/%m/%Y") %></td>
+            <td id="user-<%= user.id %>">
+              <%= link_to "#{user.banned? ? 'Dé-bannir' : 'Bannir'}", user_banned_path(user.id), remote: true, method: :patch, data: { confirm: "Êtes-vous sûr de vouloir #{user.banned? ? 'dé-bannir' : 'bannir'} le compte de #{user.pseudo} ?" }, class: "btn btn-primary btn-first #{user.banned? ? 'bg-red text-white' : ''}" %>
+              <%= link_to "Dé-bannir", user_banned_path(user.id), remote: true, method: :patch, data: { confirm: "Êtes-vous sûr de vouloir dé-bannir le compte de #{user.pseudo} ?" }, class: "btn btn-primary bg-red text-white hidden btn-deban" %>
+              <%= link_to "Bannir", user_banned_path(user.id), remote: true, method: :patch, data: { confirm: "Êtes-vous sûr de vouloir bannir le compte de #{user.pseudo} ?" }, class: "btn btn-primary hidden btn-ban" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

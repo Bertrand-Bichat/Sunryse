@@ -1,0 +1,17 @@
+.current-order {
+  font-size: 1.35rem;
+}
+
+// Smallest device
+@media (min-width: 100px) {
+  .current-order-button {
+    width: 50%;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  .current-order-button {
+    width: 25%;
+  }
+}

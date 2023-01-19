@@ -1,0 +1,29 @@
+<div class="container py-5">
+
+  <!-- title -->
+  <h1 class="text-center">Mon panier</h1>
+
+  <div class="row w-100 border p-3 my-5 current-order">
+    <div class="d-flex justify-content-around align-items-center flex-column flex-md-row w-100 pt-3">
+      <p>
+        <% if @order_type == order_type_subscription %>
+          Abonnement mensuel
+        <% elsif @order_type == order_type_camera %>
+          <%= @camera_credits %> crédits d'échange par caméra
+        <% else %>
+          Tarif découverte
+        <% end %>
+      </p>
+      <p>Durée : <%= @order_type == order_type_camera ? "#{@camera_credits*30} min" : @duration %></p>
+      <p>Prix total TTC : <%= humanized_money(@amount) %><%= @order_type == order_type_subscription ? '€/mois' : '€' %></p>
+    </div>
+    <div class="d-flex mt-5 justify-content-end align-items-center w-100">
+      <input id="cgv" name="cgv" type="checkbox" class="mb-2"></input>
+      <label for="cgv" class="ml-2">J'accèpte les <%= link_to "Conditions Générales de Vente", cgv_path, target: "_blank", rel: "noopener noreferrer", class: "font-weight-bold" %></label>
+    </div>
+    <div class="col-12 my-2 pr-5 text-center text-md-right">
+      <%= link_to 'Payer', '#', class: "btn btn-primary current-order-button disabled", id: "order-fake-button" %>
+      <%= render 'form', order: @order, duration: @duration, order_type: @order_type, amount_cents: @amount_cents, camera_credits: @camera_credits %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="home-logo">
+  <% if @page.main_logo.attached? %>
+    <%= cl_image_tag @page.main_logo.key, width: 200, alt: "logo SUNRYSE", loading: 'lazy' %>
+  <% else %>
+    <%= image_tag 'logo_main.png', width: 200, alt: 'logo SUNRYSE', class: "p-0 m-0", loading: 'lazy' %>
+  <% end %>
+</div>

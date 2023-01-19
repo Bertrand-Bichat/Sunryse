@@ -1,0 +1,28 @@
+<div id="browser-incorrect" class="p-4">
+
+  <p>Le système d'échange par caméra est compatible uniquement avec <strong>Chrome</strong> ou <strong>Firefox</strong>
+  sur <strong>ordinateur</strong>, téléchargez la dernière version ci-dessous.</p>
+
+  <p>Si vous êtes sur <strong>iPhone</strong> ou <strong>iPad</strong>, veuillez utiliser
+  <strong>Safari</strong> comme navigateur internet.</p>
+
+  <p>Si vous êtes sur un <strong>mobile</strong> ou une <strong>tablette</strong> sous <strong>android</strong>,
+  veuillez utiliser <strong>Chrome</strong> ou <strong>Firefox</strong></p>
+
+  <br>
+
+  <div class="d-flex justify-content-around">
+    <!-- chrome -->
+    <%= link_to "https://www.google.com/chrome/?hl=fr", target: "_blank", rel: "noopener noreferrer nofollow" do %>
+      <%= image_tag "chrome.png", size: "64x64", alt: "Google Chrome", title: "Google Chrome" %>
+    <% end %>
+    <!-- firefox -->
+    <%= link_to "https://www.mozilla.org/fr/firefox/new/", target: "_blank", rel: "noopener noreferrer nofollow" do %>
+      <%= image_tag "firefox.png", size: "64x64", alt: "Mozilla Firefox", title: "Mozilla Firefox" %>
+    <% end %>
+  </div>
+</div>
+
+<div id="browser-correct" class="p-4">
+  <p>Votre navigateur internet est compatible avec le système d'échange par caméra !</p>
+</div>

@@ -1,0 +1,10 @@
+<%= @customer.pseudo %>,
+
+Votre commande chez SUNRYSE a bien été prise en compte.
+
+Détails de la commande
+------------------------------
+Abonnement mensuel: <%= @order.order_type == order_type_subscription ? 'Oui' : 'Non' %>
+<%= ["", nil].include?(@order.duration) ? '' : "Durée : #{@order.duration}" %>
+Prix TTC : <%= humanized_money(@order.amount) %><%= @order.order_type == order_type_subscription ? '€/mois' : '€' %>
+<%= (@order.camera_credits > 0) ? "Crédits achetés : #{@order.camera_credits}" : '' %>

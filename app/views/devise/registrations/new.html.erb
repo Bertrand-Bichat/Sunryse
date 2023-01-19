@@ -1,0 +1,169 @@
+<% content_for :meta_title, "SUNRYSE | Création de compte" %>
+<% canonical(new_user_registration_url) %>
+
+<!-- background linear gradient orange-yellow -->
+<div class="bg-gradient">
+
+  <div class="d-flex flex-column flex-md-row">
+    <div class="col-12 col-md-3 text-center text-md-left p-0 m-0">
+      <%= link_to root_path do %>
+        <% if @page.main_logo.attached? %>
+          <%= cl_image_tag @page.main_logo.key, width: 200, alt: "logo SUNRYSE", loading: 'lazy' %>
+        <% else %>
+          <%= image_tag 'logo_main.png', width: 200, alt: 'logo SUNRYSE', class: "p-0 m-0", loading: 'lazy' %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-12 col-md-6">
+      <h1 class="title text-bold text-center mx-auto mt-5"><em>"Bienvenue chez Sunryse !"</em></h1>
+      <h2 class="text-bold text-center mb-5">INSCRIPTION</h2>
+    </div>
+  </div>
+
+  <div class="container">
+
+
+    <div class="row">
+
+      <div class="col">
+      </div>
+
+      <div class="col-12 col-md-8 mb-5">
+        <div class="border rounded px-4 pt-4 mb-5 bg-white">
+
+          <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+            <%= f.error_notification %>
+
+
+            <div class="form-inputs">
+              <%= f.input :email,
+                          required: true,
+                          label: 'Mon email',
+                          input_html: { autocomplete: 'email' } %>
+              <%= f.input :pseudo,
+                          required: true,
+                          label: 'Mon pseudo',
+                          input_html: { autocomplete: 'pseudo' } %>
+              <%= f.input :address,
+                          required: true,
+                          hint: 'Votre adresse restera secrète. Seule votre ville sera affichée sur votre profil.',
+                          label: 'Mon adresse postale',
+                          input_html: { class: "address-input", id: "flat_address", autocomplete: 'address' } %>
+              <%= f.input :gender,
+                          required: true,
+                          label: 'Je suis',
+                          collection: gender_choice,
+                          as: :radio_buttons,
+                          input_html: { autocomplete: 'gender' } %>
+              <%= f.input :birthday,
+                          required: true,
+                          label: 'Ma date de naissance',
+                          start_year: Date.today.year - 100,
+                          end_year: Date.today.year - 17,
+                          order: [:day, :month, :year],
+                          input_html: { autocomplete: 'birthday' } %>
+              <%= f.input :shape,
+                          required: true,
+                          label: 'Ma silhouette',
+                          collection: shape_choice,
+                          as: :radio_buttons,
+                          input_html: { autocomplete: 'shape' } %>
+              <%= f.input :hair,
+                          required: true,
+                          label: 'Couleur de mes cheveux',
+                          collection: hair_choice,
+                          as: :radio_buttons,
+                          input_html: { autocomplete: 'hair' } %>
+              <%= f.input :eye,
+                          required: true,
+                          label: 'Couleur des mes yeux',
+                          collection: eye_choice,
+                          as: :radio_buttons,
+                          input_html: { autocomplete: 'eye' } %>
+              <p class="p-form">Je coche les cases qui me concernent :</p>
+              <%= f.input :smoke,
+                          label: 'Je fume',
+                          input_html: { autocomplete: 'smoke' } %>
+              <%= f.input :want_child,
+                          label: "J'ai un/des enfant(s)",
+                          input_html: { autocomplete: 'want_child' } %>
+              <%= f.input :lives_alone,
+                          label: 'Je vis seul(e)',
+                          input_html: { autocomplete: 'lives_alone' } %>
+              <%= f.input :beliefs,
+                          label: 'Mes croyances',
+                          input_html: { rows: 5, autocomplete: 'beliefs' } %>
+              <%= f.input :projects,
+                          label: 'Mes projets',
+                          input_html: { rows: 5, autocomplete: 'projects' } %>
+              <%= f.input :movies,
+                          label: 'Mes films et séries préférées',
+                          input_html: { rows: 5, autocomplete: 'movies' } %>
+              <%= f.input :books,
+                          label: 'Mes livres préférées',
+                          input_html: { rows: 5, autocomplete: 'books' } %>
+              <div class="border-top border-dark my-5"></div>
+              <%= f.input :gender_criteria,
+                          required: true,
+                          label: 'Je cherche',
+                          collection: gender_choice,
+                          as: :radio_buttons,
+                          input_html: { autocomplete: 'gender_criteria' } %>
+              <%= f.input :goal,
+                          required: true,
+                          label: 'Pour',
+                          collection: goal_choice,
+                          as: :radio_buttons,
+                          input_html: { autocomplete: 'goal' } %>
+              <%= f.input :min_age,
+                          required: true,
+                          label: 'Âge minimum',
+                          input_html: { min: 18, max: 100, autocomplete: 'min_age' } %>
+              <%= f.input :max_age,
+                          required: true,
+                          label: 'Âge maximum',
+                          input_html: { min: 18, max: 100, autocomplete: 'max_age' } %>
+              <%= f.input :perimeter_criteria,
+                          required: true,
+                          label: 'Localisation (km)',
+                          input_html: { min: 0, max: 50000, autocomplete: 'perimeter_criteria' } %>
+              <%= f.input :shape_criteria,
+                          required: true,
+                          label: 'Silhouette(s)',
+                          hint: 'plusieurs réponses possibles',
+                          collection: shape_choice,
+                          as: :check_boxes,
+                          input_html: { autocomplete: 'shape_criteria' } %>
+              <%= f.input :i_want,
+                          label: 'Ce que je veux',
+                          input_html: { rows: 5, autocomplete: 'i_want' } %>
+              <%= f.input :i_dont_want,
+                          label: 'Ce que je ne veux pas',
+                          input_html: { rows: 5, autocomplete: 'i_dont_want' } %>
+              <div class="border-top border-dark my-5"></div>
+              <%= f.input :password,
+                          required: true,
+                          label: 'Mot de passe',
+                          hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length),
+                          input_html: { autocomplete: 'new-password' } %>
+              <%= f.input :password_confirmation,
+                          required: true,
+                          label: 'Confirmer le mot de passe' %>
+            </div>
+
+            <div class="form-actions">
+              <%= f.button :submit, 'Valider', class: "btn btn-primary w-100 my-3" %>
+            </div>
+            <p class="mt-3">Déja un compte ? <%= link_to 'Se connecter', root_path, class: "text-decoration-none font-weight-bold" %> </p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

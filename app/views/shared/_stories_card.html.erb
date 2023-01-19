@@ -1,0 +1,50 @@
+<div class="bg-gradient">
+  <div class="container bg-white pb-5 text-center">
+
+    <% if user.class == User %>
+      <h1 class="text-center py-5">Stories de <%= user.pseudo %></h1>
+    <% else %>
+      <h1 class="text-center py-5">Toutes les Stories</h1>
+    <% end %>
+
+    <% if stories.present? %>
+
+      <div class="row w-100">
+        <% stories.each do |story| %>
+          <% person = User.find(story.record_id) %>
+          <div class="d-flex flex-column align-items-center col-12 col-md-6 col-lg-4 mb-3" id="photo-<%= story.key %>">
+            <% if story.content_type == mp4_content_type %>
+              <%= cl_video_tag story.key, controls: true, transformation: [ height: 300, width: 300, crop: "fill"], class: "m-2", alt: "#{story.filename}", loading: 'lazy' %>
+            <% else %>
+              <%= cl_image_tag story.key, height: 300, width: 300, crop: :fill, class: "m-2", alt: "#{story.filename}", loading: 'lazy' %>
+            <% end %>
+
+            <div class="d-flex">
+              <%= link_to profil_path(person.slug), class: "text-decoration-none font-weight-bold" do %>
+                <%= person.pseudo %>
+              <% end %>
+
+              <!-- green dot -->
+              <% if person.online? %>
+                <div class="dot-stories ml-2 mt-1" title="en ligne"></div>
+              <% end %>
+            </div>
+
+            <% if (user.class == User) && (user == current_user || current_user.admin?) %>
+              <%= link_to delete_photo_attachment_user_path(story.signed_id), remote: true, method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer la story #{story.filename} ?" }, aria: { label: 'Supprimer cette story' } do %>
+                <i class="fas fa-trash-alt text-orange" title="Supprimer la story <%= story.filename %>"></i>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= will_paginate stories, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+
+    <% else %>
+
+      <h2 class="mt-5"><em>Aucune story n'a été publiée pour l'instant.</em></h2>
+
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<%= @customer.pseudo %>,
+
+SUNRYSE vient de vous rembourser la somme de <%= @payment_intent.amount %>€ correspondant
+à votre paiement du <%= @payment_intent.created_at.to_date.strftime("%d/%m/%Y") %> lié à
+votre commande effectuée le <%= @order.paid_date.to_date.strftime("%d/%m/%Y") %>
+sur le site internet de SUNRYSE.
+
+Rappel de la commande
+------------------------------
+Abonnement mensuel: <%= @order.order_type == order_type_subscription ? 'Oui' : 'Non' %>
+<%= ["", nil].include?(@order.duration) ? '' : "Durée : #{@order.duration}" %>
+Prix TTC : <%= humanized_money(@order.amount) %><%= @order.order_type == order_type_subscription ? '€/mois' : '€' %>
+<%= (@order.camera_credits > 0) ? "Crédits achetés : #{@order.camera_credits}" : '' %>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Meta données -->
+    <title><%= meta_title %></title>
+    <meta name="Language" content="fr" />
+    <meta name="description" content="<%= meta_description %>">
+
+    <!-- Facebook Open Graph data -->
+    <meta property="og:title" content="<%= meta_title %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:image" content="<%= meta_image %>" />
+    <meta property="og:description" content="<%= meta_description %>" />
+    <meta property="og:site_name" content="<%= meta_title %>" />
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= meta_title %>">
+    <meta name="twitter:description" content="<%= meta_description %>">
+    <meta name="twitter:image:src" content="<%= meta_image %>">
+
+    <!-- canonical link -->
+    <%= yield :canonical %>
+
+    <!-- favicon -->
+    <% if @page.favicon.attached? %>
+      <link rel="shortcut icon" type="image/x-icon" href="<%= cl_image_path @page.favicon.key %>">
+    <% else %>
+      <%= favicon_link_tag %>
+    <% end %>
+
+    <!-- csrf & csp -->
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Font import -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+    <!-- Mapbox -->
+    <!-- Uncomment if you import CSS in app/javascript/packs/application.js -->
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+    <!-- tarteaucitron JS - RGPD -->
+    <!-- <script type="text/javascript" src="/tarteaucitron/tarteaucitron.js"></script> -->
+    <script rel="preload" type="text/javascript" src="https://cdn.jsdelivr.net/gh/AmauriC/tarteaucitron.js@20210329/tarteaucitron.min.js"></script>
+    <script type="text/javascript" defer="true">
+      tarteaucitron.init({
+        "privacyUrl": "<%= cgv_path %>", /* Privacy policy url */
+        "hashtag": "#tarteaucitron", /* Open the panel with this hashtag */
+        "cookieName": "tarteaucitron", /* Cookie name */
+        "orientation": "bottom", /* Banner position (top - bottom) */
+        "groupServices": false, /* Group services by category */
+        "showAlertSmall": false, /* Show the small banner on bottom right */
+        "cookieslist": true, /* Show the cookie list */
+        "closePopup": false, /* Show a close X on the banner */
+        "showIcon": true, /* Show cookie icon to manage cookies */
+        "iconPosition": "BottomRight", /* BottomRight, BottomLeft, TopRight and TopLeft */
+        "adblocker": false, /* Show a Warning if an adblocker is detected */
+        "DenyAllCta" : true, /* Show the deny all button */
+        "AcceptAllCta" : true, /* Show the accept all button when highPrivacy on */
+        "highPrivacy": true, /* Disable auto consent */
+        "handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
+        "removeCredit": false, /* Remove credit link */
+        "moreInfoLink": true, /* Show more info link */
+        "useExternalCss": false, /* If false, the tarteaucitron.css file will be loaded */
+        //"cookieDomain": ".my-multisite-domaine.fr", /* Shared cookie for multisite */
+        "readmoreLink": "<%= cgv_path %>", /* Change the default readmore link */
+        "mandatory": false, /* Show a message about mandatory cookies */
+      });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics for tarteaucitron -->
+    <script type="text/javascript" defer="true">
+      tarteaucitron.user.gtagUa = 'UA-XXXXXXXXX-1';
+      tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
+      (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
+    </script>
+
+    <!-- stripe subscriptions tokens -->
+    <% if controller_name == 'payments' %>
+      <%= javascript_include_tag 'https://js.stripe.com/v3/', 'data-turbolinks-track': 'reload', defer: true, integrity: true %>
+    <% end %>
+
+    <!-- javascript loading from app/javascript -->
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload', defer: true, integrity: true %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
+  </head>
+
+  <body>
+    <!-- navbar -->
+    <% unless ['sessions', 'registrations', 'passwords', 'messages', 'payments', 'errors'].include?(controller_name) || request.fullpath == '/profils-a-cote-de-ma-position-actuelle' %>
+      <%= render 'shared/navbar' %>
+    <% end %>
+
+    <!-- notices & alerts -->
+    <%= render 'shared/flashes' %>
+
+    <!-- main content -->
+    <main role="main">
+      <%= yield %>
+    </main>
+
+    <!-- top arrow button -->
+    <button id="myBtn" title="Retour en haut de la page"><i class="fas fa-chevron-circle-up"></i></button>
+
+    <!-- footer -->
+    <% unless ['payments', 'chatrooms', 'errors'].include?(controller_name) || request.fullpath == '/profils-a-cote-de-ma-position-actuelle' %>
+      <%= render 'shared/footer' %>
+    <% end %>
+
+    <!-- CKEditor javascript tag -->
+    <% if ['registrations', 'pages'].include?(controller_name) %>
+      <%= javascript_include_tag Ckeditor.cdn_url, defer: true %>
+    <% end %>
+
+    <noscript>Votre navigateur web a bloqué le JavaScript. C'est important de le débloquer pour profiter de toutes les fonctionnallités de ce site web !</noscript>
+  </body>
+</html>

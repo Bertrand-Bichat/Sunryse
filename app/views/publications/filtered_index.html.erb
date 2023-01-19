@@ -1,0 +1,27 @@
+<div class="bg-red d-flex justify-content-around">
+  <div class="publications-width p-2 p-md-5 bg-white">
+
+    <!-- title -->
+    <h1 class="text-center">Mur des publications</h1>
+
+    <!-- new form -->
+    <div class="col-12">
+      <%= render 'form', publication: @publication %>
+    </div>
+
+    <!-- display filtered publications -->
+    <div class="row m-3 mt-5">
+      <% if @publications.empty? %>
+        <h2 class="text-center col-12 mt-5">
+          <em>Aucune publication n'a été créée pour l'instant. A vous de démarrer !</em>
+        </h2>
+      <% else %>
+        <% @publications.each do |publication| %>
+          <%= render 'shared/publication_card', publication: publication %>
+        <% end %>
+        <%= will_paginate @publications, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      <% end %>
+    </div>
+
+  </div>
+</div>

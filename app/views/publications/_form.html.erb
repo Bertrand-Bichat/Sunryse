@@ -1,0 +1,18 @@
+<div class="mt-5 text-center border p-4">
+
+  <%= simple_form_for(publication) do |f| %>
+    <%= f.error_notification %>
+    <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+    <div class="">
+      <%= f.input :content,
+                  label: 'Exprimez-vous',
+                  input_html: { rows: 3, autocomplete: 'content' } %>
+    </div>
+
+    <div>
+      <%= f.button :submit, "Valider", class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
+
+</div>

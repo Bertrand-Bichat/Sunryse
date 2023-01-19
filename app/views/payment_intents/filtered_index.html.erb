@@ -1,0 +1,65 @@
+<div class="container my-5">
+  <p>
+    <%= link_to admin_dashboard_orders_path, class: "btn btn-primary" do %>
+      <i class="fas fa-chevron-left"></i> Retour
+    <% end %>
+  </p>
+
+  <!-- title -->
+  <h1 class="text-center mt-5">Liste des paiements liés à la commande n°<%= @order.id %> effectuée par <%= @order.user.pseudo %></h1>
+
+  <!-- unsubscribed button -->
+  <% if policy(@order).unsubcribed? %>
+    <p>
+      <%= link_to unsubcribed_path(order_id: @order.id), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir résilier définitivement cet abonnement ?' }, class: "btn btn-primary w-100 my-4 text-white bg-red py-3" do %>
+        Résilier définitivement l'abonnement
+      <% end %>
+    </p>
+  <% end %>
+
+  <!-- display payment_intents -->
+  <div class="row mt-3">
+    <% @payment_intents.each do |payment_intent| %>
+      <div class="border border-dark p-3 col-12 mb-5" id="payment-intent-<%= payment_intent.id %>">
+        <p>ID : <%= payment_intent.id %></p>
+        <p>Date : <%= payment_intent.created_at.to_date.strftime("%d/%m/%Y") %></p>
+        <% if @order.duration %>
+          <p>Durée : <%= @order.duration %></p>
+        <% end %>
+        <% if @order.camera_credits > 0 %>
+          <p>Nombre de crédits caméra : <%= @order.camera_credits %></p>
+        <% end %>
+        <p>Montant : <%= payment_intent.amount %> €</p>
+        <p>
+          Etat du remboursement :
+          <% if payment_intent.refund_status == succeeded %>
+            Effectué avec succès <i class="fas fa-check-square"></i>
+          <% elsif payment_intent.refund_status == pending %>
+            En cours... <i class="fas fa-spinner"></i>
+          <% elsif payment_intent.refund_status == failed %>
+            Annulé <i class="fas fa-ban"></i>
+          <% else %>
+            N'a pas été demandé
+          <% end %>
+        </p>
+        <!-- refund btn -->
+        <% if policy(payment_intent).refund? %>
+          <p>
+            <%= link_to refund_path(@order, payment_intent), method: :patch, data: { confirm: 'Êtes-vous sûr de vouloir rembourser ce paiement ?' }, class: "btn btn-primary" do %>
+              Rembourser ce paiement
+            <% end %>
+          </p>
+        <% end %>
+        <!-- check_refund_status btn -->
+        <% if policy(payment_intent).check_refund_status? %>
+          <p>
+            <%= link_to check_refund_status_path(payment_intent), method: :patch, class: "btn btn-primary" do %>
+              Mettre à jour le statut du remboursement
+            <% end %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>
